@@ -20,17 +20,6 @@ allprojects {
 
 task runAppEngine(dependsOn: [":backend:appengineRun"]){
 
-}
-
-task runTestCases(dependsOn: [":app:connectedAndroidTest"]){
-
-}
-
-task stopAppEngine(dependsOn: [":backend:appengineStop"]){
-
-}
-
-task testBackend(dependsOn: ["backend:appengineRun","app:connectedAndroidTest","backend:appengineStop"]){
     evaluationDependsOn ":backend"
 
     project(":backend") {
@@ -38,10 +27,23 @@ task testBackend(dependsOn: ["backend:appengineRun","app:connectedAndroidTest","
             daemon true
         }
     }
+}
+task stopAppEngine(dependsOn: [":backend:appengineStop"]){
 
-    tasks.getByPath(":app:connectedAndroidTest").mustRunAfter tasks.getByPath(":backend:appengineRun")
+}
+task runTestCases(dependsOn: [":app:connectedAndroidTest"]){
 
-    tasks.getByPath(":app:connectedAndroidTest").finalizedBy tasks.getByPath(":backend:appengineStop")
+    finalizedBy stopAppEngine
+
+
+}
+
+
+
+task testBackend(dependsOn: ["runAppEngine"]){
+
+    finalizedBy runTestCases
+
     doLast {
         println "JobDone"
     }

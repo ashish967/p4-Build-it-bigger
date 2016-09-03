@@ -30,10 +30,12 @@ public class JokeTeller {
             "Patrick, “What school?”"
     };
 
+    static  int mCounter;
+
 
     public static String tellMeJoke(){
 
-        return mJokes[(int) (Math.random()*(mJokes.length-1))];
+        return mJokes[(mCounter++)%mJokes.length];
     }
 
 
